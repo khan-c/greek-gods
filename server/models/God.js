@@ -22,7 +22,7 @@ const GodSchema = new Schema({
     },
   ],
   abode: {
-    type: Scehma.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "abode",
   },
   emblems: [

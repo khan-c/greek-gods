@@ -1,3 +1,3 @@
-require("./god");
-require("./abode");
-require("./emblem");
+require("./God");
+require("./Abode");
+require("./Emblem");
