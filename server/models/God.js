@@ -98,22 +98,54 @@ GodSchema.statics.removeRelative = (godId, relativeId, relationship) => {
 
     switch (relationship) {
       case "parent":
-        god.parents.pull(relativeId);
-        relative.children.pull(godId);
+        god.parents.pull(relative);
+        relative.children.pull(god);
         break;
       case "child":
-        god.children.pull(relativeId);
-        relative.parents.pull(godId);
+        god.children.pull(relative);
+        relative.parents.pull(god);
         break;
       case "sibling":
-        god.siblings.pull(relativeId);
-        relative.siblings.pull(godId);
+        god.siblings.pull(relative);
+        relative.siblings.pull(god);
         break;
     }
 
     return Promise.all([god.save(), relative.save()]).then(
       ([god, relative]) => god
     );
+  });
+};
+
+GodSchema.statics.addEmblem = (godId, emblemId) => {
+  const God = mongoose.model("god");
+  const Emblem = mongoose.model("emblem");
+
+  return God.findById(godId).then((god) => {
+    return Emblem.findById(emblemId).then((emblem) => {
+      god.emblems.push(emblem);
+      emblem.gods.push(god);
+
+      return Promise.all([god.save(), emblem.save()]).then(
+        ([god, emblem]) => god
+      );
+    });
+  });
+};
+
+GodSchema.statics.removeEmblem = (godId, emblemId) => {
+  const God = mongoose.model("god");
+  const Emblem = mongoose.model("emblem");
+
+  return God.findById(godId).then((god) => {
+    return Emblem.findById(emblemId).then((emblem) => {
+      god.emblems.pull(emblem);
+      emblem.gods.pull(god);
+
+      return Promise.all([god.save(), emblem.save()]).then(
+        ([god, emblem]) => god
+      );
+    });
   });
 };
 

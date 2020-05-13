@@ -75,6 +75,33 @@ const mutation = new GraphQLObjectType({
         return God.removeRelative(godId, relativeId, relationship);
       },
     },
+    addGodEmblem: {
+      type: GodType,
+      args: {
+        godId: { type: GraphQLID },
+        emblemId: { type: GraphQLID },
+      },
+      resolve(parentValue, { godId, emblemId }) {
+        return God.addEmblem(godId, emblemId);
+      },
+    },
+    removeGodEmblem: {
+      type: GodType,
+      args: {
+        godId: { type: GraphQLID },
+        emblemId: { type: GraphQLID },
+      },
+      resolve(parentValue, { godId, emblemId }) {
+        return God.findOneAndUpdate(
+          { _id: godId },
+          { $pull: { emblems: emblemId } },
+          { safe: true, new: true },
+          (err, god) => {
+            return god;
+          }
+        );
+      },
+    },
   },
 });
 
