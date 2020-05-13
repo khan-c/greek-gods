@@ -10,7 +10,6 @@ const AbodeSchema = new Schema({
   },
   coordinate: {
     type: String,
-    required: true,
   },
   gods: [
     {

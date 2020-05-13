@@ -149,4 +149,26 @@ GodSchema.statics.removeEmblem = (godId, emblemId) => {
   });
 };
 
+GodSchema.statics.updateAbode = (godId, abodeId) => {
+  const God = mongoose.model("god");
+  const Abode = mongoose.model("abode");
+
+  return God.findById(godId).then((god) => {
+    if (god.abode) {
+      Abode.findById(god.abode).then((oldAbode) => {
+        oldAbode.pull(god);
+        return oldAbode.save();
+      });
+    }
+    return Abode.findById(abodeId).then((newAbode) => {
+      god.abode = newAbode;
+      newAbode.gods.push(god);
+
+      return Promise.all([god.save(), newAbode.save()]).then(
+        ([god, newAbode]) => god
+      );
+    });
+  });
+};
+
 module.exports = mongoose.model("god", GodSchema);

@@ -95,6 +95,16 @@ const mutation = new GraphQLObjectType({
         return God.removeEmblem(godId, emblemId);
       },
     },
+    updateGodAbode: {
+      type: GodType,
+      args: {
+        godId: { type: GraphQLID },
+        abodeId: { type: GraphQLID },
+      },
+      resolve(parentValue, { godId, abodeId }) {
+        return God.updateAbode(godId, abodeId);
+      },
+    },
   },
 });
 
