@@ -92,14 +92,7 @@ const mutation = new GraphQLObjectType({
         emblemId: { type: GraphQLID },
       },
       resolve(parentValue, { godId, emblemId }) {
-        return God.findOneAndUpdate(
-          { _id: godId },
-          { $pull: { emblems: emblemId } },
-          { safe: true, new: true },
-          (err, god) => {
-            return god;
-          }
-        );
+        return God.removeEmblem(godId, emblemId);
       },
     },
   },
