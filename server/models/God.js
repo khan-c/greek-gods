@@ -171,4 +171,24 @@ GodSchema.statics.updateAbode = (godId, abodeId) => {
   });
 };
 
+GodSchema.statics.addDomain = (godId, domain) => {
+  const God = mongoose.model("god");
+
+  return God.findById(godId).then((god) => {
+    god.domains.push(domain);
+
+    return god.save().then((god) => god);
+  });
+};
+
+GodSchema.statics.removeDomain = (godId, domain) => {
+  const God = mongoose.model("god");
+
+  return God.findById(godId).then((god) => {
+    god.domains = god.domains.filter((godDomain) => godDomain !== domain);
+
+    return god.save().then((god) => god);
+  });
+};
+
 module.exports = mongoose.model("god", GodSchema);
