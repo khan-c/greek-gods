@@ -3,6 +3,8 @@ const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = graphql;
 const mongoose = require("mongoose");
 const God = mongoose.model("god");
 const GodType = require("./god_type");
+const Abode = mongoose.model("abode");
+const AbodeType = require("./abode_type");
 
 const mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -24,9 +26,7 @@ const mutation = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parentValue, { id }) {
-        return God.deleteOne({ _id: id }, (err, god) => {
-          return god;
-        });
+        return God.deleteOne({ _id: id });
       },
     },
     updateGod: {
@@ -123,6 +123,42 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, { godId, domain }) {
         return God.removeDomain(godId, domain);
+      },
+    },
+    newAbode: {
+      type: AbodeType,
+      args: {
+        name: { type: GraphQLString },
+        coordinates: { type: GraphQLString },
+      },
+      resolve(parentValue, { name, coordinates }) {
+        return new Abode({ name, coordinates }).save();
+      },
+    },
+    deleteAbode: {
+      type: AbodeType,
+      args: {
+        id: { type: GraphQLID },
+      },
+      resolve(parentValue, { id }) {
+        return Abode.deleteOne({ _id: id });
+      },
+    },
+    updateAbode: {
+      type: AbodeType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLString },
+      },
+      resolve(parentValue, { id, name }) {
+        return Abode.findOneAndUpdate(
+          { _id: id },
+          { $set: { name } },
+          { new: true },
+          (err, abode) => {
+            return abode;
+          }
+        );
       },
     },
   },
