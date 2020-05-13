@@ -1,10 +1,13 @@
 const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = graphql;
 const mongoose = require("mongoose");
+
 const God = mongoose.model("god");
 const GodType = require("./god_type");
 const Abode = mongoose.model("abode");
 const AbodeType = require("./abode_type");
+const Emblem = mongoose.model("emblem");
+const EmblemType = require("./emblem_type");
 
 const mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -138,7 +141,7 @@ const mutation = new GraphQLObjectType({
     deleteAbode: {
       type: AbodeType,
       args: {
-        id: { type: GraphQLID },
+        id: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parentValue, { id }) {
         return Abode.deleteOne({ _id: id });
@@ -152,6 +155,41 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, { id, name }) {
         return Abode.findOneAndUpdate(
+          { _id: id },
+          { $set: { name } },
+          { new: true },
+          (err, abode) => {
+            return abode;
+          }
+        );
+      },
+    },
+    newEmblem: {
+      type: EmblemType,
+      args: {
+        name: { type: GraphQLString },
+      },
+      resolve(parentValue, { name, coordinates }) {
+        return new Emblem({ name, coordinates }).save();
+      },
+    },
+    deleteEmblem: {
+      type: EmblemType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parentValue, { id }) {
+        return Emblem.deleteOne({ _id: id });
+      },
+    },
+    updateEmblem: {
+      type: EmblemType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLString },
+      },
+      resolve(parentValue, { id, name }) {
+        return Emblem.findOneAndUpdate(
           { _id: id },
           { $set: { name } },
           { new: true },
