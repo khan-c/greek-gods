@@ -1,17 +1,17 @@
 import React from "react";
 import { Route, Link } from "react-router-dom";
 import GodsList from "./gods/GodsList";
-import GodCreate from "./create/GodCreate";
+import CreateComponent from "./create";
 
 const App = () => (
   <div>
     <div>
       <Link to="/">List</Link>
       <br />
-      <Link to="/new">Create God</Link>
+      <Link to="/new">Create</Link>
     </div>
     <Route exact path="/" component={GodsList} />
-    <Route exact path="/new" component={GodCreate} />
+    <Route exact path="/new" component={CreateComponent} />
   </div>
 );
 
