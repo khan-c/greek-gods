@@ -6,13 +6,13 @@ import Mutations from "../../graphql/mutations";
 
 const { UPDATE_GOD } = Mutations;
 
-export class NameDetail extends Component {
+export class TypeDetail extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       editing: false,
-      name: this.props.name || "",
+      type: this.props.type || "god",
     };
 
     this.handleEdit = this.handleEdit.bind(this);
@@ -37,15 +37,18 @@ export class NameDetail extends Component {
                 onSubmit={(e) => {
                   e.preventDefault();
                   updateGod({
-                    variables: { id: this.props.id, name: this.state.name },
+                    variables: { id: this.props.id, type: this.state.type },
                   }).then(() => this.setState({ editing: false }));
                 }}
               >
-                <input
-                  value={this.state.name}
-                  onChange={this.fieldUpdate("name")}
-                />
-                <button type="submit">Update Name</button>
+                <select
+                  value={this.state.type}
+                  onChange={this.fieldUpdate("type")}
+                >
+                  <option value="god">God</option>
+                  <option value="goddess">Goddess</option>
+                </select>
+                <button type="submit">Update Type</button>
               </form>
             </div>
           )}
@@ -62,11 +65,11 @@ export class NameDetail extends Component {
               <FaPencilAlt />
             </IconContext.Provider>
           </div>
-          <h2>{this.state.name}</h2>
+          <h2>{this.state.type}</h2>
         </div>
       );
     }
   }
 }
 
-export default NameDetail;
+export default TypeDetail;

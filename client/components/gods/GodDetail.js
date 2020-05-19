@@ -3,6 +3,7 @@ import { Query } from "react-apollo";
 
 import Queries from "../../graphql/queries";
 import NameDetail from "../detail/NameDetail";
+import TypeDetail from "../detail/TypeDetail";
 const { FETCH_GOD } = Queries;
 
 const GodDetail = (props) => {
@@ -15,6 +16,7 @@ const GodDetail = (props) => {
         return (
           <div className="detail">
             <NameDetail id={data.god.id} name={data.god.name} />
+            <TypeDetail id={data.god.id} type={data.god.type} />
           </div>
         );
       }}
