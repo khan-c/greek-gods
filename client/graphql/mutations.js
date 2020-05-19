@@ -33,4 +33,12 @@ export default {
       }
     }
   `,
+  UPDATE_GOD: gql`
+    mutation UpdateGod($id: ID, $name: String) {
+      updateGod(id: $id, name: $name) {
+        id
+        name
+      }
+    }
+  `,
 };
